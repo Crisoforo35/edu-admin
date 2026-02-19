@@ -67,7 +67,7 @@ export default function GraduationChart() {
                                 color: "white",
                                 fontSize: "13px",
                             }}
-                            formatter={(value: number) => [`${value}%`, ""]}
+                            formatter={(value: number | undefined) => [`${value ?? 0}%`]}
                         />
                         <Legend
                             verticalAlign="bottom"
