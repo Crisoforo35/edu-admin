@@ -1,4 +1,5 @@
 import { login } from "./actions";
+import { SubmitButton } from "@/components/auth/SubmitButton";
 
 export default async function SignInPage(props: {
     searchParams: Promise<{ error?: string; message?: string }>;
@@ -69,7 +70,7 @@ export default async function SignInPage(props: {
                         </div>
                     )}
 
-                    <form className="space-y-5">
+                    <form action={login} className="space-y-5">
                         <div>
                             <label
                                 htmlFor="numeroDeControl"
@@ -104,12 +105,7 @@ export default async function SignInPage(props: {
                             />
                         </div>
 
-                        <button
-                            formAction={login}
-                            className="w-full py-3 px-4 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm hover:from-blue-500 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200 shadow-lg shadow-blue-600/25 hover:shadow-blue-500/30 cursor-pointer"
-                        >
-                            Iniciar sesión
-                        </button>
+                        <SubmitButton />
                     </form>
                 </div>
 

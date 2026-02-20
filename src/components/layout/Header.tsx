@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Header({
     userName,
@@ -17,12 +18,12 @@ export default function Header({
     };
 
     return (
-        <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/[0.06]">
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/6">
             <div className="max-w-7xl mx-auto px-4 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Left: Logo */}
                     <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
+                        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
                             <svg
                                 className="w-5 h-5 text-white"
                                 fill="none"
@@ -42,10 +43,26 @@ export default function Header({
                         </span>
                     </div>
 
+                    {/* Navigation */}
+                    <nav className="hidden md:flex items-center gap-6 mx-6">
+                        <Link
+                            href={`/${institucion}/home`}
+                            className="text-sm font-medium text-blue-200/80 hover:text-white transition-colors"
+                        >
+                            Inicio
+                        </Link>
+                        <Link
+                            href={`/${institucion}/data-update`}
+                            className="text-sm font-medium text-blue-200/80 hover:text-white transition-colors"
+                        >
+                            Actualización de datos
+                        </Link>
+                    </nav>
+
                     {/* Right: User info & actions */}
                     <div className="flex items-center gap-4">
                         {/* Notification bell */}
-                        <button className="relative p-2 rounded-lg hover:bg-white/[0.06] transition-colors cursor-pointer">
+                        <button className="relative p-2 rounded-lg hover:bg-white/6 transition-colors cursor-pointer">
                             <svg
                                 className="w-5 h-5 text-blue-200/60"
                                 fill="none"
@@ -63,7 +80,7 @@ export default function Header({
                         </button>
 
                         {/* Institution badge */}
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06]">
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/4 border border-white/6">
                             <svg
                                 className="w-4 h-4 text-blue-300/60"
                                 fill="none"
@@ -84,7 +101,7 @@ export default function Header({
 
                         {/* User avatar & name */}
                         <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 text-white text-xs font-bold uppercase">
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 text-white text-xs font-bold uppercase">
                                 {userName.charAt(0)}
                             </div>
                             <span className="hidden md:block text-sm font-medium text-blue-100/80 max-w-[140px] truncate">
