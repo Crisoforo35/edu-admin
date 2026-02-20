@@ -1,3 +1,5 @@
+import { SupabaseClient } from "@supabase/supabase-js";
+
 const novedades = [
     {
         id: 1,
@@ -44,9 +46,9 @@ const tagStyles: Record<string, string> = {
     emerald: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
 };
 
-export default function NewsSection() {
+export default function NewsSection({ userRole }: { userRole: string }) {
     return (
-        <div className="backdrop-blur-xl bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 h-full">
+        <div className={`${userRole === 'Maestro' ? 'col-span-2' : 'col-span-1'} backdrop-blur-xl bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 h-full`}>
             <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
                     <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20">

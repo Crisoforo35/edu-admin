@@ -42,7 +42,7 @@ export default async function HomePage({ params }: { params: { institucion: stri
             {/* Row 1: Graduation chart + News */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {userRole !== "Maestro" && <GraduationChart />}
-                <NewsSection />
+                <NewsSection userRole={userRole} />
             </div>
 
             {/* Row 2: Class schedule + User profile */}

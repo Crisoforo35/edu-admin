@@ -25,18 +25,22 @@ export default function Header({
 
     const isActive = (path: string) => pathname === path;
 
-    const navLinks = role === "Maestro"
+    const navLinks = role === "Administrador"
         ? [
-            { href: `/${institucion}/home`, label: "Inicio" },
-            { href: `/${institucion}/groups`, label: "Gestión de grupos" },
-            { href: `/${institucion}/attendance`, label: "Asistencia" },
-            { href: `/${institucion}/teacher-grades`, label: "Calificaciones" },
+            { href: `/${institucion}/admin`, label: "Administración" },
         ]
-        : [
-            { href: `/${institucion}/home`, label: "Inicio" },
-            { href: `/${institucion}/data-update`, label: "Actualización de datos" },
-            { href: `/${institucion}/grades`, label: "Boleta" },
-        ];
+        : role === "Maestro"
+            ? [
+                { href: `/${institucion}/home`, label: "Inicio" },
+                { href: `/${institucion}/groups`, label: "Gestión de grupos" },
+                { href: `/${institucion}/attendance`, label: "Asistencia" },
+                { href: `/${institucion}/teacher-grades`, label: "Calificaciones" },
+            ]
+            : [
+                { href: `/${institucion}/home`, label: "Inicio" },
+                { href: `/${institucion}/data-update`, label: "Actualización de datos" },
+                { href: `/${institucion}/grades`, label: "Boleta" },
+            ];
 
     return (
         <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/6 print:hidden">
@@ -116,7 +120,7 @@ export default function Header({
                                 />
                             </svg>
                             <span className="text-xs font-medium text-blue-200/60 capitalize">
-                                {institucion.replace(/-/g, " ")}
+                                {decodeURIComponent(institucion.replace(/-/g, " ")).toString()}
                             </span>
                         </div>
 

@@ -30,16 +30,23 @@ export async function login(formData: FormData) {
         data: { user },
     } = await supabase.auth.getUser();
 
-    // Get profile for institution slug
+    // Get profile for institution and role
     const { data: profile } = await supabase
         .from("profiles")
-        .select("*, institutes(name)")
+        .select("*, institutes(name), roles(name)")
         .eq("id", user!.id)
         .single();
 
     // @ts-ignore
     const institucion = profile?.institutes?.name || "edu-admin";
+    // @ts-ignore
+    const userRole = profile?.roles?.name;
 
     revalidatePath("/", "layout");
-    redirect(`/${institucion}/home`);
+
+    if (userRole === "Administrador") {
+        redirect(`/${institucion}/admin`);
+    } else {
+        redirect(`/${institucion}/home`);
+    }
 }

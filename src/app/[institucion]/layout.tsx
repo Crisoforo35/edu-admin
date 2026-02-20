@@ -23,13 +23,11 @@ export default async function InstitutionLayout({
     // Fetch user profile
     const { data: profile } = await supabase
         .from("profiles")
-        .select("full_name, institutes(name), roles(name)")
+        .select("full_name, institutes(slug, name), roles(name)")
         .eq("id", user.id)
         .single();
 
     const userName = profile?.full_name || user.email || "Usuario";
-    // @ts-ignore
-    const instituteName = profile?.institutes?.name || institucion;
     // @ts-ignore
     const userRole = profile?.roles?.name || "Estudiante";
 
@@ -37,7 +35,7 @@ export default async function InstitutionLayout({
         <div className="min-h-screen bg-slate-950">
             <Header
                 userName={userName}
-                institucion={instituteName}
+                institucion={institucion}
                 role={userRole}
             />
             <main className="pt-4 pb-8 px-4 lg:px-8 max-w-7xl mx-auto">
