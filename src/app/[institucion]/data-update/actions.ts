@@ -31,6 +31,7 @@ export async function updateUser(formData: FormData) {
         peso: formData.get("peso") as string,
         tipo_sangre: formData.get("tipo_sangre") as string,
         correo: formData.get("correo") as string,
+        role: formData.get("role") as string,
         updated_at: new Date().toISOString(),
     };
 

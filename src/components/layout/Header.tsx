@@ -57,6 +57,12 @@ export default function Header({
                         >
                             Actualización de datos
                         </Link>
+                        <Link
+                            href={`/${institucion}/grades`}
+                            className="text-sm font-medium text-blue-200/80 hover:text-white transition-colors"
+                        >
+                            Boleta
+                        </Link>
                     </nav>
 
                     {/* Right: User info & actions */}
