@@ -1,0 +1,17 @@
+{
+  "github.copilot.advanced": {
+    "debug.testOverrideProxyUrl": "",
+    "debug.testOverrideStubCount": 2,
+    "debug.overrideProxyUrl": ""
+  },
+  "[mcpServers]": {
+    "supabase": {
+      "command": "npx",
+      "args": ["supabase-mcp"],
+      "env": {
+        "SUPABASE_URL": "https://szhbzsxnhpiqnnghstho.supabase.co",
+        "SUPABASE_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6aGJ6c3huaHBpcW5uZ2hzdGhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1MTQ4NTEsImV4cCI6MjA4NzA5MDg1MX0.LJnrEpukW1lfwPwTRU_0xLT7xmz-2E6MmRrftxD9OQw"
+      }
+    }
+  }
+}

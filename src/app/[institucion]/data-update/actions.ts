@@ -46,17 +46,26 @@ export async function updateUser(formData: FormData) {
     }
 
     // Get the institution from the URL or profile to redirect back correctly
-    // Ideally we should pass it or fetch it, but let's try to get it from the profile
     const { data: profile } = await supabase
         .from("profiles")
-        .select("institucion")
+        .select(`
+            institute_id,
+            institutes (
+                slug
+            )
+        `)
         .eq("id", user.id)
         .single();
 
-    const institucion = profile?.institucion || "edu-admin";
+    console.log(profile);
 
-    revalidatePath(`/${institucion}/home`);
-    revalidatePath(`/${institucion}/data-update`);
+    // @ts-ignore
+    const institute = profile?.institutes?.slug || "edu-admin";
+    console.log(institute);
+
+
+    revalidatePath(`/${institute}/home`);
+    revalidatePath(`/${institute}/data-update`);
 
     return { success: "Perfil actualizado correctamente" };
 }

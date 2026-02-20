@@ -1,24 +1,45 @@
 "use client";
-
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+// @ts-ignore
+// import { cn } from "@/lib/utils";
 
 export default function Header({
     userName,
     institucion,
+    role
 }: {
     userName: string;
     institucion: string;
+    role: string;
 }) {
     const router = useRouter();
+    const pathname = usePathname();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleSignOut = async () => {
         await fetch("/api/auth/signout", { method: "POST" });
         router.push("/sign-in");
     };
 
+    const isActive = (path: string) => pathname === path;
+
+    const navLinks = role === "Maestro"
+        ? [
+            { href: `/${institucion}/home`, label: "Inicio" },
+            { href: `/${institucion}/groups`, label: "Gestión de grupos" },
+            { href: `/${institucion}/attendance`, label: "Asistencia" },
+            { href: `/${institucion}/teacher-grades`, label: "Calificaciones" },
+        ]
+        : [
+            { href: `/${institucion}/home`, label: "Inicio" },
+            { href: `/${institucion}/data-update`, label: "Actualización de datos" },
+            { href: `/${institucion}/grades`, label: "Boleta" },
+        ];
+
     return (
-        <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/6">
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/6 print:hidden">
             <div className="max-w-7xl mx-auto px-4 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Left: Logo */}
@@ -44,25 +65,19 @@ export default function Header({
                     </div>
 
                     {/* Navigation */}
-                    <nav className="hidden md:flex items-center gap-6 mx-6">
-                        <Link
-                            href={`/${institucion}/home`}
-                            className="text-sm font-medium text-blue-200/80 hover:text-white transition-colors"
-                        >
-                            Inicio
-                        </Link>
-                        <Link
-                            href={`/${institucion}/data-update`}
-                            className="text-sm font-medium text-blue-200/80 hover:text-white transition-colors"
-                        >
-                            Actualización de datos
-                        </Link>
-                        <Link
-                            href={`/${institucion}/grades`}
-                            className="text-sm font-medium text-blue-200/80 hover:text-white transition-colors"
-                        >
-                            Boleta
-                        </Link>
+                    <nav className="hidden lg:flex items-center gap-1 mx-6">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive(link.href)
+                                    ? "bg-white/10 text-white shadow-sm shadow-white/5"
+                                    : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                                    }`}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
                     </nav>
 
                     {/* Right: User info & actions */}
@@ -118,7 +133,7 @@ export default function Header({
                         {/* Sign out button */}
                         <button
                             onClick={handleSignOut}
-                            className="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-red-300/70 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
+                            className="lg:flex hidden items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-red-300/70 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
                         >
                             <svg
                                 className="w-4 h-4"
@@ -135,8 +150,67 @@ export default function Header({
                             </svg>
                             <span className="hidden sm:inline">Salir</span>
                         </button>
+
+                        {/* Mobile menu button */}
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="lg:hidden shrink-0 p-2 rounded-lg text-white hover:bg-white/10 transition-colors cursor-pointer"
+                            aria-label="Toggle menu"
+                        >
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                {isMenuOpen ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                )}
+                            </svg>
+                        </button>
                     </div>
                 </div>
+
+                {/* Mobile Menu Overlay */}
+                {isMenuOpen && (
+                    <div className="lg:hidden absolute top-16 left-0 w-full bg-slate-900 border-b border-white/10 backdrop-blur-xl animate-in fade-in slide-in-from-top-2">
+                        <div className="flex flex-col p-4 space-y-2">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap ${isActive(link.href)
+                                        ? "bg-white/10 text-white shadow-sm shadow-white/5"
+                                        : "text-blue-200/70 hover:text-white hover:bg-white/5"
+                                        }`}
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                            <div className="pt-2 border-t border-white/10 mt-2">
+                                <div className="px-4 py-2 text-xs text-blue-200/40 uppercase tracking-wider font-semibold">
+                                    Cuenta
+                                </div>
+                                <div className="flex items-center gap-3 px-4 py-3">
+                                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold uppercase shrink-0">
+                                        {userName.charAt(0)}
+                                    </div>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-sm font-medium text-white truncate">{userName}</span>
+                                        <span className="text-xs text-blue-200/50 truncate capitalize">{institucion.replace(/-/g, " ")}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleSignOut}
+                                    className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-red-300/70 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors"
+                                >
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </header>
     );

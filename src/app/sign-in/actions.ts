@@ -33,11 +33,12 @@ export async function login(formData: FormData) {
     // Get profile for institution slug
     const { data: profile } = await supabase
         .from("profiles")
-        .select("institucion")
+        .select("*, institutes(name)")
         .eq("id", user!.id)
         .single();
 
-    const institucion = profile?.institucion || "edu-admin";
+    // @ts-ignore
+    const institucion = profile?.institutes?.name || "edu-admin";
 
     revalidatePath("/", "layout");
     redirect(`/${institucion}/home`);

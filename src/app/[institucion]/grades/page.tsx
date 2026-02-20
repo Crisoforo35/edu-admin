@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import PrintButton from "@/components/ui/PrintButton";
 import { Grade, Subject, GradeRecord, GradesBySemester } from "@/types/grades";
 
-export default async function GradesPage() {
+export default async function GradesPage({ params }: { params: { institucion: string } }) {
     const supabase = await createClient();
+    const { institucion } = await params;
 
     const {
         data: { user },
@@ -14,6 +15,19 @@ export default async function GradesPage() {
         return redirect("/sign-in");
     }
 
+    // Check if user is a teacher
+    const { data: teacher } = await supabase
+        .from("teachers")
+        .select("id")
+        .eq("email", user.email)
+        .maybeSingle();
+
+    // If teacher, redirect to the new teacher grades page
+    if (teacher) {
+        redirect(`/${institucion}/teacher-grades`);
+    }
+
+    // If student, show grades report
     // Get user profile for name
     const { data: profile } = await supabase
         .from("profiles")
@@ -28,7 +42,7 @@ export default async function GradesPage() {
 
     const userName = profile?.full_name || user.email?.split("@")[0] || "Estudiante";
     // @ts-ignore
-    const institucion = profile?.institutes?.name || "Institución";
+    const instituteName = profile?.institutes?.name || "Institución";
 
     const { data: gradesData, error } = await supabase
         .from("grades")
@@ -95,7 +109,7 @@ export default async function GradesPage() {
                 </div>
                 <PrintButton
                     userName={userName}
-                    institucion={institucion}
+                    institucion={instituteName}
                     gradesBySemester={gradesBySemester}
                 />
             </div>

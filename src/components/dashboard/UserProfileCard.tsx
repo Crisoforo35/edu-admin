@@ -4,6 +4,7 @@ interface UserProfileCardProps {
     numeroDeControl: string | null;
     carrera: string | null;
     semestre: number | null;
+    role?: string;
 }
 
 export default function UserProfileCard({
@@ -12,6 +13,7 @@ export default function UserProfileCard({
     numeroDeControl,
     carrera,
     semestre,
+    role = "Estudiante",
 }: UserProfileCardProps) {
     return (
         <div className="backdrop-blur-xl bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 h-full">
@@ -32,7 +34,7 @@ export default function UserProfileCard({
                     </svg>
                 </div>
                 <h3 className="text-sm font-semibold text-white">
-                    Datos del Estudiante
+                    {role === "Maestro" ? "Datos del Docente" : "Datos del Estudiante"}
                 </h3>
             </div>
 
@@ -50,23 +52,29 @@ export default function UserProfileCard({
             {/* Info grid */}
             <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
-                    <span className="text-xs text-blue-200/50">No. de Control</span>
+                    <span className="text-xs text-blue-200/50">
+                        {role === "Maestro" ? "ID de Empleado" : "No. de Control"}
+                    </span>
                     <span className="text-sm font-semibold text-white font-mono">
                         {numeroDeControl || "—"}
                     </span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
-                    <span className="text-xs text-blue-200/50">Carrera</span>
-                    <span className="text-sm font-medium text-blue-100/80">
-                        {carrera || "—"}
-                    </span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
-                    <span className="text-xs text-blue-200/50">Semestre</span>
-                    <span className="text-sm font-semibold text-white">
-                        {semestre ? `${semestre}°` : "—"}
-                    </span>
-                </div>
+                {role !== "Maestro" && (
+                    <>
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
+                            <span className="text-xs text-blue-200/50">Carrera</span>
+                            <span className="text-sm font-medium text-blue-100/80">
+                                {carrera || "—"}
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
+                            <span className="text-xs text-blue-200/50">Semestre</span>
+                            <span className="text-sm font-semibold text-white">
+                                {semestre ? `${semestre}°` : "—"}
+                            </span>
+                        </div>
+                    </>
+                )}
                 <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
                     <span className="text-xs text-blue-200/50">Estatus</span>
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
